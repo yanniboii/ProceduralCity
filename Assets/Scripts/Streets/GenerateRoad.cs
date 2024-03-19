@@ -11,6 +11,7 @@ public class GenerateRoad : MonoBehaviour
     [Range(0.96f, 1f)]
     public float straightThreshold = 0.96f;
 
+    public bool close = true;
 
     private float lastThreshold;
     private float lastWidth;
@@ -32,7 +33,7 @@ public class GenerateRoad : MonoBehaviour
     {
         curve = GetComponent<BezierCurve>();
         points = curve.GetPoints(res);
-        GenerateRoadMesh();
+        GenerateRoadMesh(close);
         AnalyzeRoad();
         curve.OnBezierPointChanged += updateRoad;
     }
@@ -53,11 +54,11 @@ public class GenerateRoad : MonoBehaviour
 
     void updateRoad(int a)
     {
-        GenerateRoadMesh();
+        GenerateRoadMesh(close);
         AnalyzeRoad();
     }
 
-    void GenerateRoadMesh()
+    void GenerateRoadMesh(bool close = true)
     {
         points = curve.GetPoints(res);
         rightVertices = new Vector3[points.Length];
@@ -72,7 +73,7 @@ public class GenerateRoad : MonoBehaviour
 
         Vector3[] vertices = new Vector3[numVertices];
         int[] triangles = new int[numTriangles];
-
+        if (!close) numPoints -= res ;
         for (int i = 0; i < numPoints; i++)
         {
             // Calculate the vertices

@@ -14,6 +14,7 @@ public class GenerateRoundCurve : MonoBehaviour
     [SerializeField] Material mat;
     Vector3[] points;
     [SerializeField] List<GameObject> ringsAndPerimeter;
+    [SerializeField] bool Generate;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +27,13 @@ public class GenerateRoundCurve : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Generate)
+        {
+            GenerateCircularPerimeter();
+            AddRings(numRings, radiusDecrement);
+            GenerateStreets();
+            Generate = false;
+        }
     }
 
     void GenerateStreets()
@@ -56,14 +63,22 @@ public class GenerateRoundCurve : MonoBehaviour
                     curveObject.GetComponent<MeshRenderer>().material = mat;
 
                     BezierCurve curve = curveObject.AddComponent<BezierCurve>();
-                    curve.AddPointAt(perimeterPoint);
-                    curve.AddPointAt((perimeterPoint + 0.5f * (ringPoint - perimeterPoint)) +new Vector3(Random.Range(-10,10),0, Random.Range(-10, 10)) );
+                    BezierPoint p0 = curve.AddPointAt(perimeterPoint);
 
-                    curve.AddPointAt(ringPoint);
+                    BezierPoint p1 = curve.AddPointAt((perimeterPoint + 0.5f * (ringPoint - perimeterPoint)) +new Vector3(Random.Range(-10,10),0, Random.Range(-10, 10)) );
+                    BezierPoint p2 = curve.AddPointAt(ringPoint);
+                    p2.handle2 = (p2.position - p1.position).normalized * 2;
+                    p0.handle2 = (p0.position - p1.position).normalized * 2;
+
+
+                    p1.handleStyle = BezierPoint.HandleStyle.Broken;
+                    p1.handle1 = (p1.position - p2.position).normalized*3;
+                    p1.handle2 = (p1.position - p0.position).normalized*3;
                     GenerateRoad road = curveObject.AddComponent<GenerateRoad>();
-                    road.width = 1;
+                    road.width = 2;
                     road.res = 30;
                     road.straightThreshold = 0.98f;
+                    road.close = false;
 
                 }
             }
@@ -113,8 +128,8 @@ public class GenerateRoundCurve : MonoBehaviour
             p1.handle1 = new Vector3(-0.28f, 0, 0);
             if (i != 0)
             {
-                previousPoint.handle2 = (p1.position - previousPoint.position).normalized;
-                p1.handle1 = (previousPoint.position - p1.position).normalized;
+                previousPoint.handle2 = (p1.position - previousPoint.position).normalized*2;
+                p1.handle1 = (previousPoint.position - p1.position).normalized*2;
             }
             previousPoint = p1;
         }
@@ -123,7 +138,7 @@ public class GenerateRoundCurve : MonoBehaviour
         curveObject.GetComponent<MeshRenderer>().material = mat;
         GenerateRoad road = curveObject.AddComponent<GenerateRoad>();
         GeneratePlot plot = curveObject.AddComponent<GeneratePlot>();
-        road.width = 1;
+        road.width = 3;
         road.res = 30;
         road.straightThreshold = 0.999f;
         points = curve.GetPoints(30);
@@ -182,7 +197,7 @@ public class GenerateRoundCurve : MonoBehaviour
             curveObject.AddComponent<MeshRenderer>();
             curveObject.GetComponent<MeshRenderer>().material = mat;
             GenerateRoad road = curveObject.AddComponent<GenerateRoad>();
-            road.width = 1;
+            road.width = 4;
             road.res = 30;
             road.straightThreshold = 0.98f;
             ringsAndPerimeter.Add(curveObject);

@@ -238,12 +238,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axiom: K
-  recursion: 3
+  recursion: 52
   WallSize: {x: 5, y: 5, z: 1}
   FloorSize: {x: 5, y: 1, z: 5}
   letter: 4b00550050004100
   rule:
-  - A+P+U
+  - A+P+U+++K
   - C[W>W>W]
   - C[W>>W]
   - C[W>>W>W]

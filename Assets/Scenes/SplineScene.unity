@@ -351,13 +351,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35de5b17741bc654f9585edc51e92230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 202.66
+  radius: 307.32
   numPoints: 29
   noiseScale: 2.4
-  radiusDecrement: 57.3
+  radiusDecrement: 76.01
   numRings: 3
   mat: {fileID: 2100000, guid: 0c368787011ad8d4baba5f71c0b3239f, type: 2}
   ringsAndPerimeter: []
+  Generate: 0
 --- !u!4 &1321238354
 Transform:
   m_ObjectHideFlags: 0
