@@ -15,6 +15,7 @@ public class GenerateRoundCurve : MonoBehaviour
     Vector3[] points;
     [SerializeField] List<GameObject> ringsAndPerimeter;
     [SerializeField] bool Generate;
+    public List<List<GameObject>> ringsAndRoads = new List<List<GameObject>>();
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +40,9 @@ public class GenerateRoundCurve : MonoBehaviour
     void GenerateStreets()
     {
         bool previuosTrue = false; // else roads too close to each other
-        // Connect each point on the perimeter to the corresponding point on each ring
+                                   // Connect each point on the perimeter to the corresponding point on each ring
+        ringsAndRoads.Add(new List<GameObject>());
+        Debug.Log(ringsAndRoads.Count);
         for (int i = 0; i < numPoints; i++)
         {
             if (previuosTrue)
@@ -79,6 +82,13 @@ public class GenerateRoundCurve : MonoBehaviour
                     road.res = 30;
                     road.straightThreshold = 0.98f;
                     road.close = false;
+                    Debug.Log("ring index " + (ringIndex - 1) + " l am " + ringsAndRoads.Count);
+                    if (ringsAndRoads.Count <= ringIndex - 1)
+                    {
+                        ringsAndRoads.Add(new List<GameObject>());
+                        Debug.Log("Added new ringAndRoads list. Total count: " + ringsAndRoads.Count);
+                    }
+                    ringsAndRoads[ringIndex - 1].Add(curveObject);
 
                 }
             }
@@ -96,7 +106,7 @@ public class GenerateRoundCurve : MonoBehaviour
         float z = middleOfPerimeter.z + radius * Mathf.Sin(angle);
         if(ringsAndPerimeter[ringIndex].GetComponent<BezierCurve>() != null)
         {
-            Debug.Log(index + "  " + ringIndex + "  " + ringsAndPerimeter.Count + "  " + ringsAndPerimeter[ringIndex].GetComponent<BezierCurve>()[index].position);
+            //Debug.Log(index + "  " + ringIndex + "  " + ringsAndPerimeter.Count + "  " + ringsAndPerimeter[ringIndex].GetComponent<BezierCurve>()[index].position);
         }
         else
         {

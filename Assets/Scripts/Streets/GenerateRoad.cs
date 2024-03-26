@@ -26,7 +26,12 @@ public class GenerateRoad : MonoBehaviour
         
         private set;
     }
-    Vector3[] leftVertices;
+    public Vector3[] leftVertices
+    {
+        get;
+
+        private set;
+    }
 
     // Start is called before the first frame update
     void Start()

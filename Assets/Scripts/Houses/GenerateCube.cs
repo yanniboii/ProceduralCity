@@ -78,19 +78,19 @@ public class GenerateCube : MonoBehaviour
         //}
 
         ConnectionPoint cp1 = new ConnectionPoint();
-        cp1.point = new Vector3(0, scale.y, 0 );
+        cp1.point = new Vector3(0, scale.y, 0);
         cp1.rotation = Quaternion.Euler(0, 0, 0);
         cp1.connectionType = ConnectionType.wall;
         connectionPoints.points.Add(cp1);
 
         ConnectionPoint cp2 = new ConnectionPoint();
-        cp2.point = new Vector3(scale.x, scale.y,0);
-        cp2.rotation = Quaternion.Euler(0,90,0);
+        cp2.point = new Vector3(scale.x, scale.y, 0);
+        cp2.rotation = Quaternion.Euler(0, 90, 0);
         cp2.connectionType = ConnectionType.wall;
         connectionPoints.points.Add(cp2);
 
         ConnectionPoint cp3 = new ConnectionPoint();
-        cp3.point = new Vector3(0, scale.y,-scale.z +1);
+        cp3.point = new Vector3(0, scale.y, -scale.z + 1);
         cp3.rotation = Quaternion.Euler(0, 0, 0);
         cp3.connectionType = ConnectionType.wall;
         connectionPoints.points.Add(cp3);
@@ -100,6 +100,12 @@ public class GenerateCube : MonoBehaviour
         cp4.rotation = Quaternion.Euler(0, 90, 0);
         cp4.connectionType = ConnectionType.wall;
         connectionPoints.points.Add(cp4);
+
+        //ConnectionPoint cp5 = new ConnectionPoint();
+        //cp5.point = new Vector3(0, 0, 0);
+        //cp5.rotation = Quaternion.Euler(0, 0, 0);
+        //cp5.connectionType = ConnectionType.ceiling;
+        //connectionPoints.points.Add(cp5);
 
         this.connectionPoints = connectionPoints;
         meshFilter.mesh = cubeMesh;
@@ -167,13 +173,13 @@ public class GenerateCube : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        if(connectionPoints != null)
+        if (connectionPoints != null)
         {
-            if(connectionPoints.points != null)
+            if (connectionPoints.points != null)
             {
-                if(connectionPoints.points.Count != 0)
+                if (connectionPoints.points.Count != 0)
                 {
-                    for(int i = 0; i < connectionPoints.points.Count; i++)
+                    for (int i = 0; i < connectionPoints.points.Count; i++)
                     {
                         Gizmos.DrawSphere(connectionPoints.points[i].point, 0.2f);
                     }

@@ -88,8 +88,20 @@ public class ShapeGrammars : MonoBehaviour
         {
             switch (c)
             {
-                case 'C':
+                case 'F':
                     if(transformStack.Count > 0 && connectionPoints.points.Count > 0)
+                    {
+                        generateCube.GenerateFloor(connectionPoints.points[connectionPointIndex].point + offset, FloorSize, out connectionPoints);
+                        Debug.Log("A");
+                    }
+                    else
+                    {
+                        generateCube.GenerateFloor(this.transform.position + offset, FloorSize, out connectionPoints);
+                        Debug.Log("B");
+                    }
+                    break;
+                case 'C':
+                    if (transformStack.Count > 0 && connectionPoints.points.Count > 0)
                     {
                         generateCube.GenerateFloor(connectionPoints.points[connectionPointIndex].point + offset, FloorSize, out connectionPoints);
                         Debug.Log("A");
@@ -138,14 +150,28 @@ public class ShapeGrammars : MonoBehaviour
                     rotation*= rotation2;
                     break;
                 case '<':
-                    //transform.Rotate(Vector3.left * Random.Range(-angle, angle));
+                    if (connectionPoints.points.Count > connectionPointIndex)
+                    {
+                        connectionPointIndex++;
+                    }
+                    else
+                    {
+                        if (!(connectionPoints.points.Count >= connectionPointIndex - 1))
+                        {
+                            connectionPointIndex = 0;
+                        }
+                    }
+                    Quaternion rotation3 = Quaternion.Euler(0, -90, 0);
+                    rotation *= rotation3; 
+                    break;
+                case '^':
+                    offset.y += WallSize.y;
                     break;
                 case '+':
                     offset.x += FloorSize.x;
                     break;
                 case '-':
                     //transform.Rotate(Vector3.forward * Random.Range(-angle, angle));
-
                     break;
                 case ',':
                     break;
