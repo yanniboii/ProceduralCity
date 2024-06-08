@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class GenerateRoad : MonoBehaviour
 {
-    public int res;
+    public delegate void OnRoadBuild();
+    public OnRoadBuild onRoadBuild;
+
+    public int res = 30;
     public float width;
 
     [SerializeField] bool drawGizmos;
@@ -32,15 +35,25 @@ public class GenerateRoad : MonoBehaviour
 
         private set;
     }
+    private void OnEnable()
+    {
+    }
 
+    private void OnDisable()
+    {
+    }
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         curve = GetComponent<BezierCurve>();
         points = curve.GetPoints(res);
         GenerateRoadMesh(close);
         AnalyzeRoad();
         curve.OnBezierPointChanged += updateRoad;
+    }
+
+    private void Start()
+    {
     }
 
     // Update is called once per frame
@@ -85,11 +98,10 @@ public class GenerateRoad : MonoBehaviour
             Vector3 point = points[i];
             Vector3 heading = CalculateHeading(points, i);
             Vector3 offset = Quaternion.Euler(0, 90, 0) * heading.normalized * width / 2;
-
             vertices[2 * i] = point + offset;  // right side
-            rightVertices[i] = point + offset;
+            rightVertices[i] = (point + offset);
             vertices[2 * i + 1] = point - offset; // left side
-            leftVertices[i] = point - offset;
+            leftVertices[ i] = (point - offset);
 
             // Calculate triangles
             if (i < numPoints - 1)
@@ -134,11 +146,10 @@ public class GenerateRoad : MonoBehaviour
         points = curve.GetPoints(res);
         isCurve = new bool[points.Length];
 
-        for (int i = 1; i < points.Length - 1; i++)
+        for (int i = points.Length - 2; i >= 1; i--)
         {
             Vector3 heading1 = (points[i] - points[i - 1]).normalized;
             Vector3 heading2 = (points[i + 1] - points[i]).normalized;
-
             float dotProduct = Vector3.Dot(heading1, heading2);
             // If the dot product is below the threshold, it's considered a curve
             isCurve[i] = dotProduct < straightThreshold;
@@ -156,14 +167,14 @@ public class GenerateRoad : MonoBehaviour
             {
                 if (isCurve[i])
                 {
-                    Gizmos.color = Color.red; // Curve vertices
+                    Gizmos.color = Color.red; 
                 }
                 else
                 {
-                    Gizmos.color = Color.yellow; // Straight vertices
-                    Gizmos.DrawSphere(rightVertices[i], 0.1f); // right side
-                    Gizmos.color = Color.blue; // Straight vertices
-                    Gizmos.DrawSphere(leftVertices[ i ], 0.1f); // left side
+                    Gizmos.color = Color.yellow;
+                    Gizmos.DrawSphere(rightVertices[i], 0.1f);
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawSphere(leftVertices[i], 0.1f);
 
                 }
 

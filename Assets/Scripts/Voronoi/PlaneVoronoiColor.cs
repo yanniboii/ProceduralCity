@@ -121,7 +121,12 @@ public class PlaneVoronoiColor : MonoBehaviour
                 colors[x + y * size] = Color.Lerp(Color.black, Color.white, normalizedDistance);
                 if(normalizedDistance == 0)
                 {
-                    Instantiate(GameObject.CreatePrimitive(PrimitiveType.Cube),new Vector3(x,0,y),Quaternion.identity, this.transform);
+                    LSystems lSystems = GetComponent<LSystems>();
+                    if (lSystems != null)
+                    {
+                        lSystems.Generate(new Vector3(x-size/2, 0, y-size/2));
+
+                    }
                 }
             }
         }

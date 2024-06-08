@@ -10,9 +10,11 @@ public class GenerateRoundCurve : MonoBehaviour
     public int numPoints = 100;
     public float noiseScale = 5f;
     public float radiusDecrement;
+    [SerializeField] float noiseDecrement;
     public int numRings = 2;
     [SerializeField] Material mat;
     Vector3[] points;
+    [SerializeField] GameObject housePreFab;
     [SerializeField] List<GameObject> ringsAndPerimeter;
     [SerializeField] bool Generate;
     public List<List<GameObject>> ringsAndRoads = new List<List<GameObject>>();
@@ -82,13 +84,16 @@ public class GenerateRoundCurve : MonoBehaviour
                     road.res = 30;
                     road.straightThreshold = 0.98f;
                     road.close = false;
-                    Debug.Log("ring index " + (ringIndex - 1) + " l am " + ringsAndRoads.Count);
+                    //Debug.Log("ring index " + (ringIndex - 1) + " l am " + ringsAndRoads.Count);
                     if (ringsAndRoads.Count <= ringIndex - 1)
                     {
                         ringsAndRoads.Add(new List<GameObject>());
-                        Debug.Log("Added new ringAndRoads list. Total count: " + ringsAndRoads.Count);
+                        //Debug.Log("Added new ringAndRoads list. Total count: " + ringsAndRoads.Count);
                     }
                     ringsAndRoads[ringIndex - 1].Add(curveObject);
+                    BuildOnRoad BOR = curveObject.AddComponent<BuildOnRoad>();
+                    BOR.generateRoad = road;
+                    BOR.houseGen = housePreFab;
 
                 }
             }
@@ -147,14 +152,15 @@ public class GenerateRoundCurve : MonoBehaviour
         curveObject.AddComponent<MeshRenderer>();
         curveObject.GetComponent<MeshRenderer>().material = mat;
         GenerateRoad road = curveObject.AddComponent<GenerateRoad>();
-        GeneratePlot plot = curveObject.AddComponent<GeneratePlot>();
         road.width = 3;
         road.res = 30;
         road.straightThreshold = 0.999f;
         points = curve.GetPoints(30);
-        plot.res = points.Length;
+        BuildOnRoad BOR = curveObject.AddComponent<BuildOnRoad>();
+        BOR.generateRoad = road;
+        BOR.houseGen = housePreFab;
+
         ringsAndPerimeter.Add(curveObject);
-        //plot.Generate(road.rightVertices);
     }
     public Vector3 GetMiddleOfPerimeter()
     {
@@ -176,10 +182,15 @@ public class GenerateRoundCurve : MonoBehaviour
 
         for (int i = 1; i <= numRings; i++)
         {
+            
             float currentRadius;
+            float currentNoise;
             radiusDecrement = radiusDecrement + Random.Range(-2, 2);
 
-                currentRadius = radius - i * radiusDecrement;
+
+            currentNoise = noiseScale - i * noiseDecrement;
+
+            currentRadius = radius - i * radiusDecrement;
             
 
             Vector3 middleOfPerimeter = GetMiddleOfPerimeter();
@@ -210,6 +221,9 @@ public class GenerateRoundCurve : MonoBehaviour
             road.width = 4;
             road.res = 30;
             road.straightThreshold = 0.98f;
+            BuildOnRoad BOR = curveObject.AddComponent<BuildOnRoad>();
+            BOR.generateRoad = road;
+            BOR.houseGen = housePreFab;
             ringsAndPerimeter.Add(curveObject);
         }
     }

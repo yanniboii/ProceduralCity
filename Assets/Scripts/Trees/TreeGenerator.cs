@@ -41,6 +41,12 @@ public class TreeGenerator : MonoBehaviour
 
         return random / randomnessScale;
     }
+    Vector3 GetRandomVec3(float reduc)
+    {
+        Vector3 random = new Vector3(Random.Range(-randomnessX, randomnessX), Random.Range(-randomnessY, randomnessY), Random.Range(-randomnessZ, randomnessZ));
+
+        return (random / randomnessScale)*reductionRate;
+    }
 
     public void GenerateTree(GameObject tree, Vector3 startPos, Quaternion startRot, Vector3 startingDirection, float angle,Vector3[] startVerts,out Vector3 growDir, out Vector3 pivot)
     {
@@ -150,7 +156,7 @@ public class TreeGenerator : MonoBehaviour
         }
 
 
-        tree.transform.position = startPos;
+        tree.transform.position = Vector3.zero;
         tree.transform.rotation = startRot;
 
         Mesh mesh = GenerateLayer(tree, vertices, triangles, uvs, startingDirection, angle, out growDir, out pivot);
@@ -194,7 +200,7 @@ public class TreeGenerator : MonoBehaviour
         }
 
 
-        tree.transform.position = startPos;
+        tree.transform.position = Vector3.zero;
         tree.transform.rotation = startRot;
 
         Mesh mesh = GenerateLayer(tree, vertices, triangles, uvs, startingDirection, angle, out growDir, out pivot, out newThiccness);
@@ -325,7 +331,7 @@ public class TreeGenerator : MonoBehaviour
                 float x = Mathf.Cos(j * angularStep + angularOffset);
                 float z = Mathf.Sin(j * angularStep + angularOffset);
 
-                Vector3 pos = new Vector3(x, 0f, z) + GetRandomVec3();
+                Vector3 pos = new Vector3(x, 0f, z) + GetRandomVec3(currentReduction);
                 pos *= _thiccness;
                 pos = ChangeCoordinates(pos, new Vector3(0f, 1f, 0f), growDirection);
                 vertices[i * faces + j] = pos + pivot;
@@ -394,7 +400,7 @@ public class TreeGenerator : MonoBehaviour
                 float x = Mathf.Cos(j * angularStep + angularOffset);
                 float z = Mathf.Sin(j * angularStep + angularOffset);
 
-                Vector3 pos = new Vector3(x, 0f, z) + GetRandomVec3();
+                Vector3 pos = new Vector3(x, 0f, z) + GetRandomVec3(currentReduction);
                 pos *= _thiccness;
                 pos = ChangeCoordinates(pos, new Vector3(0f, 1f, 0f), growDirection);
                 vertices[i * faces + j] = pos + pivot;

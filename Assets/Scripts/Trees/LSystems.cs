@@ -81,7 +81,7 @@ public class LSystems : MonoBehaviour
         tree.transform.position = offset;
         tree.AddComponent<MeshRenderer>();
         tree.AddComponent<MeshFilter>();
-        transform.position = Vector3.zero;
+        //transform.position = Vector3.zero;
         transform.rotation = new Quaternion(0, 0, 0, 0);
 
         for (int i = 0; i < recursion; i++)
@@ -283,8 +283,6 @@ public class LSystems : MonoBehaviour
                     {
                         angle = 50;
                     }
-                    Debug.Log(angle);
-
                     break;
                 case '-':
                     //transform.Rotate(Vector3.forward * Random.Range(-angle, angle));
@@ -296,6 +294,12 @@ public class LSystems : MonoBehaviour
                     break;
                 case '.':
                     treeGenerator.reductionRate = 1;
+                    break;
+                case '!':
+                    growDirection = Vector3.down;
+                    break;
+                case '?':
+                    growDirection = Vector3.up;
                     break;
             }
 
@@ -336,5 +340,8 @@ public class LSystems : MonoBehaviour
         leavesMeshRenderer.sharedMaterial = pentagonalDodecahedronGenerator.material; // Replace with your leaf material
         leavesMeshRenderer.material.SetFloat("_Float", randomFloat2);
         treeGenerator.reductionRate = _reductionRate;
+
+        tree.AddComponent<MeshCollider>();
+        tree.AddComponent<TreeCol>();
     }
 }
