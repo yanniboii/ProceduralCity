@@ -13,3 +13,7 @@ An editor view of the Shape grammars.
 The perspective of a person walking through the city.
 
 ![image](https://github.com/yanniboii/ProceduralCity/assets/125374308/a54ca404-93cc-437e-82f4-392c105dc97f)
+
+Different rules with an earlier unfinished version
+
+<img width="1304" height="672" alt="image" src="https://github.com/user-attachments/assets/3dcaa9f9-b148-4c34-9cd0-6b9e2ce29fef" />
